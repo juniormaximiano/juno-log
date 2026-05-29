@@ -3,18 +3,20 @@ package com.mxi.juno_log.service;
 import com.mxi.juno_log.domain.task.Task;
 import com.mxi.juno_log.domain.task.TaskStatus;
 import com.mxi.juno_log.dto.TaskCreateDTO;
+import com.mxi.juno_log.dto.TaskResponseDTO;
 import com.mxi.juno_log.repository.TaskRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class TaskService {
 
-    private Task findTaskOrThrow(long id){
+    private Task findTaskOrThrow(long id) {
         return taskRepository.findById(id).
                 orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Task not found"));
     }
@@ -25,38 +27,44 @@ public class TaskService {
         this.taskRepository = taskRepository;
     }
 
-    public Task createTask(TaskCreateDTO dto) {
+    public TaskResponseDTO createTask(TaskCreateDTO dto) {
         Task task = new Task();
         task.setTaskName(dto.title());
         task.setDescription(dto.description());
         task.setStatus(TaskStatus.PENDING);
         task.setCreatedAt(LocalDateTime.now());
         var taskCreated = taskRepository.save(task);
-        return taskCreated;
+        return convertTaskToDTO(taskCreated);
     }
 
-    public List<Task> findAllTasks() {
-        return taskRepository.findAll();
+    public List<TaskResponseDTO> findAllTasks() {
+        var tasks = taskRepository.findAll();
+        List<TaskResponseDTO> dtos = new ArrayList<>();
+
+        for (Task task : tasks) {
+            dtos.add(convertTaskToDTO(task));
+        }
+        return dtos;
     }
 
-    public Task findTaskById(Long id) {
+    public TaskResponseDTO findTaskById(Long id) {
 
-        return findTaskOrThrow(id);
+        var taskSought = findTaskOrThrow(id);
+        return convertTaskToDTO(taskSought);
 
     }
 
-    public Task completeTask(Long id) {
+    public TaskResponseDTO completeTask(Long id) {
         var taskSought = findTaskOrThrow(id);
 
-        if(taskSought.getStatus() == TaskStatus.DONE){
+        if (taskSought.getStatus() == TaskStatus.DONE) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Task already complete");
         }
-            taskSought.setFinishedAt(LocalDateTime.now());
-            taskSought.setStatus(TaskStatus.DONE);
-            taskRepository.save(taskSought);
+        taskSought.setFinishedAt(LocalDateTime.now());
+        taskSought.setStatus(TaskStatus.DONE);
+        taskRepository.save(taskSought);
 
-        return taskSought;
-
+        return convertTaskToDTO(taskSought);
 
     }
 
@@ -65,6 +73,20 @@ public class TaskService {
         var taskSought = findTaskOrThrow(id);
 
         taskRepository.deleteById(taskSought.getId());
+
+    }
+
+    public TaskResponseDTO convertTaskToDTO(Task task) {
+
+        return new TaskResponseDTO(
+                task.getId(),
+                task.getTaskName(),
+                task.getDescription(),
+                task.getStatus(),
+                task.getCreatedAt(),
+                task.getFinishedAt()
+
+        );
 
     }
 }
