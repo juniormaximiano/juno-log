@@ -84,6 +84,10 @@ public class TaskService {
 
     }
 
+    public List<TaskResponseDTO> findAllByStatusOrderByCreatedDesc() {
+        return taskRepository.findAllByOrderByCreatedAtDesc();
+    }
+
     public void deleteTask(Long id) {
 
         var taskSought = findTaskOrThrow(id);

@@ -11,4 +11,7 @@ import java.util.List;
 @Repository
 public interface TaskRepository extends JpaRepository<Task, Long> {
     List<TaskResponseDTO> findAllByStatus(TaskStatus Status);
+
+    List<TaskResponseDTO> findAllByOrderByCreatedAtDesc();
+
 }

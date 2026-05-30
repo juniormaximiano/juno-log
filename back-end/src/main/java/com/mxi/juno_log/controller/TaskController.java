@@ -47,8 +47,16 @@ public class TaskController {
         taskService.deleteTask(id);
     }
 
-    @GetMapping("/status")
+    @GetMapping("/tasks?status=PENDING")
     public List<TaskResponseDTO> findTasksByStatus(@RequestParam(required = false) TaskStatus Status) {
         return taskService.filterByStatus(Status);
     }
+
+    @GetMapping("/tasksByCreated")
+    public List<TaskResponseDTO> findAllTasksOrderByCreatedAtDesc() {
+        return taskService.findAllByStatusOrderByCreatedDesc();
+    }
+
+
+
 }
