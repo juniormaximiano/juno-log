@@ -4,7 +4,7 @@ import com.mxi.juno_log.domain.task.TaskStatus;
 
 import java.time.LocalDateTime;
 
-public record TaskResponseDTO(
+    public record TaskResponseDTO(
         long id,
         String taskName,
         String     description,
