@@ -2,6 +2,7 @@ package com.mxi.juno_log.controller;
 
 
 import com.mxi.juno_log.domain.task.Task;
+import com.mxi.juno_log.domain.task.TaskStatus;
 import com.mxi.juno_log.dto.TaskCreateDTO;
 import com.mxi.juno_log.dto.TaskResponseDTO;
 import com.mxi.juno_log.service.TaskService;
@@ -44,5 +45,10 @@ public class TaskController {
     @DeleteMapping("/{id}")
     public void deleteTask(@PathVariable long id) {
         taskService.deleteTask(id);
+    }
+
+    @GetMapping("/status")
+    public List<TaskResponseDTO> findTasksByStatus(@RequestParam(required = false) TaskStatus Status) {
+        return taskService.filterByStatus(Status);
     }
 }

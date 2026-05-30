@@ -68,6 +68,22 @@ public class TaskService {
 
     }
 
+    public List<TaskResponseDTO> filterByStatus(TaskStatus status) {
+
+     if (status == null) {
+         var  tasks = taskRepository.findAll();
+         List<TaskResponseDTO> dtos = new ArrayList<>();
+         for (Task task : tasks) {
+             dtos.add(convertTaskToDTO(task));
+         }
+         return dtos;
+     }
+
+     return taskRepository.findAllByStatus(status);
+
+
+    }
+
     public void deleteTask(Long id) {
 
         var taskSought = findTaskOrThrow(id);
