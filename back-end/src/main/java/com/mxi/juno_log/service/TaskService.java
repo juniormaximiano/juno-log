@@ -4,6 +4,7 @@ import com.mxi.juno_log.domain.task.Task;
 import com.mxi.juno_log.domain.task.TaskStatus;
 import com.mxi.juno_log.dto.TaskCreateDTO;
 import com.mxi.juno_log.dto.TaskResponseDTO;
+import com.mxi.juno_log.dto.TaskSummaryDTO;
 import com.mxi.juno_log.repository.TaskRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -93,6 +94,17 @@ public class TaskService {
         var taskSought = findTaskOrThrow(id);
 
         taskRepository.deleteById(taskSought.getId());
+
+    }
+
+
+
+    public TaskSummaryDTO countAllTasks() {
+        var pending = taskRepository.countByStatus(TaskStatus.PENDING);
+        var completed = taskRepository.countByStatus(TaskStatus.DONE);
+        var total = taskRepository.count();
+
+        return new TaskSummaryDTO(total, pending, completed);
 
     }
 

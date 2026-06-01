@@ -5,6 +5,7 @@ import com.mxi.juno_log.domain.task.Task;
 import com.mxi.juno_log.domain.task.TaskStatus;
 import com.mxi.juno_log.dto.TaskCreateDTO;
 import com.mxi.juno_log.dto.TaskResponseDTO;
+import com.mxi.juno_log.dto.TaskSummaryDTO;
 import com.mxi.juno_log.service.TaskService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
@@ -47,6 +48,7 @@ public class TaskController {
         taskService.deleteTask(id);
     }
 
+
     @GetMapping("/tasks?status=PENDING")
     public List<TaskResponseDTO> findTasksByStatus(@RequestParam(required = false) TaskStatus Status) {
         return taskService.filterByStatus(Status);
@@ -55,6 +57,11 @@ public class TaskController {
     @GetMapping("/tasksByCreated")
     public List<TaskResponseDTO> findAllTasksOrderByCreatedAtDesc() {
         return taskService.findAllByStatusOrderByCreatedDesc();
+    }
+
+    @GetMapping("/summary")
+    public TaskSummaryDTO findTasksSummary() {
+        return taskService.countAllTasks();
     }
 
 
