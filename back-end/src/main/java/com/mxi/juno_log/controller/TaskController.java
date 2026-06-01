@@ -29,8 +29,10 @@ public class TaskController {
     }
 
     @GetMapping
-    public List<TaskResponseDTO> findAllTasks() {
-        return taskService.findAllTasks();
+    public List<TaskResponseDTO> findAllTasks(
+            @RequestParam(required = false) TaskStatus status
+    ) {
+        return taskService.filterByStatus(status);
     }
 
     @GetMapping("/{id}")
@@ -49,11 +51,6 @@ public class TaskController {
     }
 
 
-    @GetMapping("/tasks?status=PENDING")
-    public List<TaskResponseDTO> findTasksByStatus(@RequestParam(required = false) TaskStatus Status) {
-        return taskService.filterByStatus(Status);
-    }
-
     @GetMapping("/tasksByCreated")
     public List<TaskResponseDTO> findAllTasksOrderByCreatedAtDesc() {
         return taskService.findAllByStatusOrderByCreatedDesc();
@@ -63,7 +60,6 @@ public class TaskController {
     public TaskSummaryDTO findTasksSummary() {
         return taskService.countAllTasks();
     }
-
 
 
 }

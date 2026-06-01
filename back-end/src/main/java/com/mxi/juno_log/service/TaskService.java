@@ -38,15 +38,6 @@ public class TaskService {
         return convertTaskToDTO(taskCreated);
     }
 
-    public List<TaskResponseDTO> findAllTasks() {
-        var tasks = taskRepository.findAll();
-        List<TaskResponseDTO> dtos = new ArrayList<>();
-
-        for (Task task : tasks) {
-            dtos.add(convertTaskToDTO(task));
-        }
-        return dtos;
-    }
 
     public TaskResponseDTO findTaskById(Long id) {
 
