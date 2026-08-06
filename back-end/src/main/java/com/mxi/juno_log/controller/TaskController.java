@@ -1,7 +1,5 @@
 package com.mxi.juno_log.controller;
 
-
-import com.mxi.juno_log.domain.task.Task;
 import com.mxi.juno_log.domain.task.TaskStatus;
 import com.mxi.juno_log.dto.TaskCreateDTO;
 import com.mxi.juno_log.dto.TaskResponseDTO;

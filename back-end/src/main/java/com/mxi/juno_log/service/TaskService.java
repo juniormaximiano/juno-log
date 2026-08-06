@@ -38,7 +38,6 @@ public class TaskService {
         return convertTaskToDTO(taskCreated);
     }
 
-
     public TaskResponseDTO findTaskById(Long id) {
 
         var taskSought = findTaskOrThrow(id);
@@ -87,8 +86,6 @@ public class TaskService {
         taskRepository.deleteById(taskSought.getId());
 
     }
-
-
 
     public TaskSummaryDTO countAllTasks() {
         var pending = taskRepository.countByStatus(TaskStatus.PENDING);
